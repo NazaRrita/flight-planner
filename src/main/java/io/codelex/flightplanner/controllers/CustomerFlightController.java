@@ -21,11 +21,13 @@ public class CustomerFlightController {
     public CustomerFlightController(CustomerService customerService) {
         this.customerService = customerService;
     }
+
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/airports")
     public List<Airport> searchAirports(String search) {
         return customerService.searchAirports(search);
     }
+
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/flights/search")
     public PageResult<Flight> searchFlights(@Valid @RequestBody SearchFlightsRequest searchFlightsRequest) {
@@ -37,7 +39,7 @@ public class CustomerFlightController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/flights/{id}")
-    public Flight findFlightById(@PathVariable ("id") Integer id) {
+    public Flight findFlightById(@PathVariable("id") Integer id) {
         return customerService.findFlightById(id);
     }
 

@@ -2,6 +2,7 @@ package io.codelex.flightplanner.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.codelex.flightplanner.requests.AddFlightRequest;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -18,7 +19,7 @@ public class Flight {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    public Flight(Integer id, AddFlightRequest addFlightRequest){
+    public Flight(Integer id, AddFlightRequest addFlightRequest) {
         this.id = id;
         this.from = addFlightRequest.getFrom();
         this.to = addFlightRequest.getTo();

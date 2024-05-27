@@ -12,6 +12,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Repository
 public class FlightRepository {
@@ -33,11 +35,11 @@ public class FlightRepository {
         }
     }
 
-    public void deleteFlight(Integer id){
+    public void deleteFlight(Integer id) {
         flightList.removeIf(flight -> flight.getId().equals(id));
     }
 
-    public Flight fetchFlight(Integer id){
+    public Flight fetchFlight(Integer id) {
         return flightList.stream()
                 .filter(flight -> flight.getId().equals(id))
                 .findFirst()
@@ -56,31 +58,36 @@ public class FlightRepository {
         return flight.getFrom().equals(flight.getTo());
     }
 
-    public List <Airport> searchAirports(String phrase){
-        return flightList.stream().map(flight -> flight.getFrom())
-                .filter(airport -> airport.getAirport().toLowerCase().trim().contains(phrase.toLowerCase().trim())
-                || airport.getCity().toLowerCase().trim().contains(phrase.toLowerCase().trim())
-                || airport.getCountry().toLowerCase().trim().contains(phrase.toLowerCase().trim())).toList();
+    public List<Airport> searchAirports(String phrase) {
+        String newPhrase = phrase.toLowerCase().trim();
+        return flightList.stream()
+                .flatMap(flight -> Stream.of(flight.getFrom(), flight.getTo())
+                        .filter(airport -> airport.getAirport().toLowerCase().contains(newPhrase)
+                                || airport.getCity().toLowerCase().contains(newPhrase)
+                                || airport.getCountry().toLowerCase().contains(newPhrase)))
+                .distinct()
+                .collect(Collectors.toList());
     }
 
-    public PageResult<Flight> searchFlights(SearchFlightsRequest searchFlightsRequest){
+    public PageResult<Flight> searchFlights(SearchFlightsRequest searchFlightsRequest) {
         if (searchFlightsRequest.getFrom().equals(searchFlightsRequest.getTo())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         int page = 1;
         List<Flight> searchedFlights = flightList.stream()
                 .filter(flight -> flight.getFrom().getAirport().equalsIgnoreCase(searchFlightsRequest.getFrom())
-                && flight.getTo().getAirport().equalsIgnoreCase(searchFlightsRequest.getTo())
-                && flight.getDepartureTime().toLocalDate().isEqual(LocalDate.parse(searchFlightsRequest.getDepartureDate())))
+                        && flight.getTo().getAirport().equalsIgnoreCase(searchFlightsRequest.getTo())
+                        && flight.getDepartureTime().toLocalDate().isEqual(LocalDate.parse(searchFlightsRequest.getDepartureDate())))
                 .toList();
-        if(searchedFlights.isEmpty()){
+        if (searchedFlights.isEmpty()) {
             page = 0;
         }
 
         return new PageResult<>(page, searchedFlights.size(), searchedFlights);
 
     }
-    public Flight findFlightById(Integer id){
+
+    public Flight findFlightById(Integer id) {
         return flightList.stream()
                 .filter(flight -> flight.getId().equals(id))
                 .findFirst()

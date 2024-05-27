@@ -24,13 +24,15 @@ public class AdminFlightController {
     public synchronized Flight addFlight(@Valid @RequestBody AddFlightRequest addFlightRequest) {
         return adminService.addFlight(addFlightRequest);
     }
+
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/flights/{id}")
-    public synchronized void deleteFlight(@PathVariable Integer id){
+    public synchronized void deleteFlight(@PathVariable Integer id) {
         adminService.deleteFlight(id);
     }
+
     @GetMapping("/flights/{id}")
-    public Flight fetchFlight(@PathVariable Integer id){
+    public Flight fetchFlight(@PathVariable Integer id) {
         return adminService.fetchFlight(id);
     }
 

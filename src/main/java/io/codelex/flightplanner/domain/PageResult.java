@@ -3,7 +3,7 @@ package io.codelex.flightplanner.domain;
 import java.util.List;
 import java.util.Objects;
 
-public class PageResult <T>{
+public class PageResult<T> {
     private Integer page;
     private Integer totalItems;
     private List<T> items;
