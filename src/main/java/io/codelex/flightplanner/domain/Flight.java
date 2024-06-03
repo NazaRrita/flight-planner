@@ -1,31 +1,58 @@
 package io.codelex.flightplanner.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.codelex.flightplanner.requests.AddFlightRequest;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
+@Entity
+@Table(name = "flights")
 public class Flight {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "flight_id")
+//    @JsonIgnore
     private Integer id;
+
+    @ManyToOne
+    @JoinColumn(name = "airport_from", referencedColumnName = "airport")
     private Airport from;
+
+    @ManyToOne
+    @JoinColumn(name = "airport_to", referencedColumnName = "airport")
     private Airport to;
     private String carrier;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @Column(name = "departure_time")
     private LocalDateTime departureTime;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @Column(name = "arrival_time")
     private LocalDateTime arrivalTime;
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+    public Flight(Airport from, Airport to, String carrier, LocalDateTime departureTime,
+                  LocalDateTime arrivalTime) {
+        this.from = from;
+        this.to = to;
+        this.carrier = carrier;
+        this.departureTime = departureTime;
+        this.arrivalTime = arrivalTime;
+    }
 
     public Flight(Integer id, AddFlightRequest addFlightRequest) {
         this.id = id;
         this.from = addFlightRequest.getFrom();
         this.to = addFlightRequest.getTo();
         this.carrier = addFlightRequest.getCarrier();
-        this.departureTime = LocalDateTime.parse(addFlightRequest.getDepartureTime(), formatter);
-        this.arrivalTime = LocalDateTime.parse(addFlightRequest.getArrivalTime(), formatter);
+        this.departureTime = addFlightRequest.getDepartureTime();
+        this.arrivalTime = addFlightRequest.getArrivalTime();
+    }
+
+    public Flight() {
+
     }
 
     public Integer getId() {
@@ -82,12 +109,16 @@ public class Flight {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Flight flight = (Flight) o;
-        return Objects.equals(from, flight.from) && Objects.equals(to, flight.to) && Objects.equals(carrier, flight.carrier) && Objects.equals(departureTime, flight.departureTime) && Objects.equals(arrivalTime, flight.arrivalTime) && Objects.equals(formatter, flight.formatter);
+        return Objects.equals(from, flight.from)
+                && Objects.equals(to, flight.to)
+                && Objects.equals(carrier, flight.carrier)
+                && Objects.equals(departureTime, flight.departureTime)
+                && Objects.equals(arrivalTime, flight.arrivalTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(from, to, carrier, departureTime, arrivalTime, formatter);
+        return Objects.hash(from, to, carrier, departureTime, arrivalTime);
     }
 
     @Override
@@ -99,7 +130,6 @@ public class Flight {
                 ", carrier='" + carrier + '\'' +
                 ", departureTime=" + departureTime +
                 ", arrivalTime=" + arrivalTime +
-                ", formatter=" + formatter +
                 '}';
     }
 }

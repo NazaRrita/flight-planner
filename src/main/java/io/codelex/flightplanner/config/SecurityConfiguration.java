@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 
@@ -18,9 +19,11 @@ public class SecurityConfiguration {
         http
                 .httpBasic(withDefaults())
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers("/testing-api/**", "/api/**", "/error/**").permitAll()
+                        request.requestMatchers("/testing-api/**", "/api/**", "/error/**, ", "/h2-console/**")
+                                .permitAll()
                                 .anyRequest().authenticated()).httpBasic(withDefaults())
-                .csrf(AbstractHttpConfigurer::disable);
+                .csrf(AbstractHttpConfigurer::disable)
+                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
         return http.build();
     }
 }

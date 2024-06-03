@@ -1,10 +1,13 @@
 package io.codelex.flightplanner.requests;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.codelex.flightplanner.domain.Airport;
+import io.codelex.flightplanner.domain.DateTimeConverter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class AddFlightRequest {
@@ -16,18 +19,21 @@ public class AddFlightRequest {
     private Airport to;
     @NotBlank
     private String carrier;
-    @NotBlank
-    private String departureTime;
-    @NotBlank
-    private String arrivalTime;
+    @NotNull
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime departureTime;
+    @NotNull
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime arrivalTime;
+
 
     public AddFlightRequest(Airport from, Airport to, String carrier,
                             String departureTime, String arrivalTime) {
         this.from = from;
         this.to = to;
         this.carrier = carrier;
-        this.departureTime = departureTime;
-        this.arrivalTime = arrivalTime;
+        this.departureTime = DateTimeConverter.dateTimeFromString(departureTime);
+        this.arrivalTime = DateTimeConverter.dateTimeFromString(arrivalTime);
     }
 
     public Airport getFrom() {
@@ -38,19 +44,19 @@ public class AddFlightRequest {
         this.from = from;
     }
 
-    public String getArrivalTime() {
+    public LocalDateTime getArrivalTime() {
         return arrivalTime;
     }
 
-    public void setArrivalTime(String arrivalTime) {
+    public void setArrivalTime(LocalDateTime arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
 
-    public String getDepartureTime() {
+    public LocalDateTime getDepartureTime() {
         return departureTime;
     }
 
-    public void setDepartureTime(String departureTime) {
+    public void setDepartureTime(LocalDateTime departureTime) {
         this.departureTime = departureTime;
     }
 

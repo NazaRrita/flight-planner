@@ -16,8 +16,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Repository
-public class FlightRepository {
+public class FlightInMemoryRepository {
     private List<Flight> flightList = new ArrayList<>();
+    private List<Airport> airportList = new ArrayList<>();
 
     public Flight addFlight(AddFlightRequest addFlightRequest) {
         Integer id = flightList.size() + 1;
@@ -97,5 +98,10 @@ public class FlightRepository {
 
     public void clearFlightList() {
         flightList.clear();
+    }
+
+    public Airport addAirport(Airport airport) {
+        airportList.add(airport);
+        return airport;
     }
 }
