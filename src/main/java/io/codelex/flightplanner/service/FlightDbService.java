@@ -62,7 +62,7 @@ public class FlightDbService implements FlightService {
     }
 
     public void checkIfFlightAlreadyExist(AddFlightRequest request) {
-        List<Flight> existingFlights = flightDbRepository.searchFlightsByCriteria(
+        List<Flight> existingFlights = flightDbRepository.searchFlightDuplicates(
                 request.getFrom().getAirport(),
                 request.getTo().getAirport(),
                 request.getCarrier(),
@@ -89,7 +89,7 @@ public class FlightDbService implements FlightService {
 
     @Override
     public List<Airport> searchAirports(String phrase) {
-        return flightDbRepository.searchAirports(phrase.toLowerCase().trim());
+        return airportDbRepository.searchAirportByPhrase(phrase.toUpperCase().trim());
     }
 
     @Override

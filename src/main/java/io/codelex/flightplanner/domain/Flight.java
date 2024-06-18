@@ -14,7 +14,6 @@ public class Flight {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "flight_id")
-//    @JsonIgnore
     private Integer id;
 
     @ManyToOne

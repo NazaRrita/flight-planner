@@ -19,7 +19,7 @@ public class SecurityConfiguration {
         http
                 .httpBasic(withDefaults())
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers("/testing-api/**", "/api/**", "/error/**, ", "/h2-console/**")
+                        request.requestMatchers("/testing-api/**", "/api/**", "/error/**", "/h2-console/**")
                                 .permitAll()
                                 .anyRequest().authenticated()).httpBasic(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)

@@ -12,11 +12,6 @@ import java.util.List;
 public interface FlightDbRepository extends JpaRepository<Flight, Integer> {
 
 
-    @Query("SELECT DISTINCT f.from FROM Flight f WHERE LOWER(f.from.airport) LIKE CONCAT('%', :phrase, '%')\n" +
-            "                                       OR LOWER(f.from.city) LIKE CONCAT('%', :phrase, '%')\n" +
-            "                                       OR LOWER(f.from.country) LIKE CONCAT('%', :phrase, '%')")
-    List<Airport> searchAirports(@Param("phrase") String phrase);
-
     @Query("Select f FROM Flight f WHERE f.from.airport = :fromAirport " +
             "AND f.to.airport = :toAirport " +
             "AND f.departureTime = :departureTime")
@@ -29,6 +24,6 @@ public interface FlightDbRepository extends JpaRepository<Flight, Integer> {
             "AND f.carrier = :carrier " +
             "AND f.departureTime = :departureTime " +
             "AND f.arrivalTime = :arrivalTime ")
-    List<Flight> searchFlightsByCriteria(String fromAirport, String toAirport, String carrier,
-                                         LocalDateTime departureTime, LocalDateTime arrivalTime);
+    List<Flight> searchFlightDuplicates(String fromAirport, String toAirport, String carrier,
+                                        LocalDateTime departureTime, LocalDateTime arrivalTime);
 }
