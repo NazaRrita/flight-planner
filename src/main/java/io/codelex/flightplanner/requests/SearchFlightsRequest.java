@@ -12,9 +12,9 @@ public class SearchFlightsRequest {
     @NotNull
     private String departureDate;
 
-    public SearchFlightsRequest(String fromAirport, String toAirport, String departureDate) {
-        this.from = fromAirport;
-        this.to = toAirport;
+    public SearchFlightsRequest(String from, String to, String departureDate) {
+        this.from = from;
+        this.to = to;
         this.departureDate = departureDate;
     }
 

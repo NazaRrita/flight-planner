@@ -1,21 +1,31 @@
 package io.codelex.flightplanner.domain;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.Objects;
 
+@Entity
+@Table(name = "airports")
 public class Airport {
     @NotBlank
     private String country;
     @NotBlank
     private String city;
     @NotBlank
+    @Id
     private String airport;
+
 
     public Airport(String airport, String city, String country) {
         this.airport = airport;
         this.city = city;
         this.country = country;
+    }
+
+
+    public Airport() {
+
     }
 
     public String getCountry() {
@@ -65,4 +75,6 @@ public class Airport {
                 ", airport='" + airport + '\'' +
                 '}';
     }
+
+
 }
