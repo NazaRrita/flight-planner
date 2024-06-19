@@ -97,7 +97,8 @@ public class FlightDbService implements FlightService {
         if (searchFlightsRequest.getFrom().equalsIgnoreCase(searchFlightsRequest.getTo())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        LocalDateTime departureTime = DateTimeConverter.dateTimeFromString(searchFlightsRequest.getDepartureDate());
+        LocalDateTime departureTime =
+                DateTimeConverter.dateValidationAndConvertToLocalDateTime(searchFlightsRequest.getDepartureDate());
 
 
         List<Flight> flights = flightDbRepository.searchFlights(

@@ -32,8 +32,8 @@ public class AddFlightRequest {
         this.from = from;
         this.to = to;
         this.carrier = carrier;
-        this.departureTime = DateTimeConverter.dateTimeFromString(departureTime);
-        this.arrivalTime = DateTimeConverter.dateTimeFromString(arrivalTime);
+        this.departureTime = DateTimeConverter.localDateTimeFromString(departureTime);
+        this.arrivalTime = DateTimeConverter.localDateTimeFromString(arrivalTime);
     }
 
     public Airport getFrom() {
